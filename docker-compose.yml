@@ -1,0 +1,47 @@
+version: '3.8'
+
+
+services:
+  flask:
+    build: ./
+    container_name: flask
+    command: sh -c "sleep 10s ; gunicorn -b 0.0.0.0:8000 main:app"
+    depends_on:
+      - mariadb.01
+    volumes:
+      - ./templates:/app/templates
+      - ./:/var/app
+    networks:
+      my-network:
+        aliases:
+          - flask-app      
+  mariadb.01:
+    build: ./mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'databaser'
+      MYSQL_DATABASE: 'reservation'
+      MYSQL_USER: 'rezuser'
+      MYSQL_PASSWORD: 'database'
+    ports:
+      - "3308:3306"
+    networks:
+      - my-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./:/var/www
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+    networks:
+      - my-network
+    depends_on:
+      - flask
+
+
+    
+networks:
+  my-network:

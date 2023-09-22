@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESERVED</title>
+    <style>
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            background-color: #c3daea;
+            color: #fff;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Align the table to the left*/
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 8px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: auto; 
+            max-height: 300px; /* Limits table expansion beyond 300px */
+            overflow: auto; /* Shows scrollbar if table exceeds limits*/
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        input[type="text"] {
+            width: 100%; 
+            padding: 4px; 
+            border: 1px solid #ccc;
+            margin-bottom: 4px; 
+        }
+
+        label {
+            margin-bottom: 4px; 
+        }
+
+        button {
+            background-color: #6e8397;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #404747;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between; 
+            align-items: center; 
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center; 
+        }
+
+        .search-input {
+            margin-right: 10px; 
+        }
+        
+        .remove-button {
+            background-color: transparent; 
+            color: red; 
+            border: none; 
+            width: 30px; 
+            height: 30px; 
+            cursor: pointer;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+
+        .remove-button:hover {
+            background-color: darkred; /
+        }
+        .remove-icon {
+            font-size: 16px; 
+        }
+        .search-container {
+            position: absolute;
+            top: 60px;
+            right: 50px;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        .search-input {
+            width: 200px; 
+            padding: 4px; 
+            border: 1px solid #ccc;
+            margin-bottom: 4px; 
+        }
+        /* success messages*/
+        .success {
+            color: green;
+        }
+
+            /* error messages */
+        .error {
+            color: red;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>PANEL RESERVATION</h1>
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+            {% for category, message in messages %}
+                <div class="{{ category }}">{{ message }}</div>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    
+    <main>
+        
+        <div class="form-container">
+            <form method="POST" action="/add_reservation"> <!-- send the form to "/add_reservation redirect as POST request" -->
+                <div class="form-row">
+                    <label for="name">NAME-SURNAME</label>
+                    <input type="text" id="name" name="name" placeholder="Enter Name-Surname">
+                </div>
+                <div class="form-row">
+                    <label for="panel">PANEL</label>
+                    <input type="text" id="panel" name="panel" placeholder="Enter Panel">
+                </div>
+                <div class="form-row">
+                    <label for="hours">Please enter the number of hours or date to make a reservation</label>
+                    <input type="text" id="hours" name="hours" placeholder="Enter Hours or (E.g. : 01.01.1999)">
+                </div>
+                <button type="submit">ADD</button> 
+            </form>
+        </div>
+    </main>
+
+    <table id="myTable">
+        <tr>
+            <th>PANEL</th>
+            <th>STATUS</th>
+            <th>NAME-SURNAME</th>
+            <th>END TIME</th>
+        </tr>
+        <!-- table data -->
+        {% for row in data %}
+        <tr onclick="selectRow(this)">
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td style="width: 50px;">
+                <form method="POST" action="/remove" onsubmit="return confirm('Are you sure you want to remove this record?');">
+                    <input type="hidden" name="panel_id" value="{{ row[0] }}">
+                    <input type="hidden" name="confirmation" value="yes"> <!-- Added a hidden input to confirm-->
+                    <button type="submit" class="remove-button"><span class="remove-icon">X</span></button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+       
+    </table>
+
+    <div class="button-container">
+        
+        <div class="search-container">
+            <form method="POST" action="/search">
+                <input class="search-input" type="text" placeholder="Search" name="search_term">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    
+</body>
+</html>

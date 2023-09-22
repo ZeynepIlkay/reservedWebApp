@@ -5,6 +5,7 @@ services:
   flask:
     build: ./
     container_name: flask
+    restart: always
     command: sh -c "sleep 10s ; gunicorn -b 0.0.0.0:8000 main:app"
     depends_on:
       - mariadb.01
@@ -30,6 +31,7 @@ services:
 
   nginx:
     image: nginx:latest
+    restart: always
     container_name: nginx
     volumes:
       - ./:/var/www

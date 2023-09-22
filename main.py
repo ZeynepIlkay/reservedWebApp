@@ -226,7 +226,7 @@ def add_reservation():
 
 def panels():
     
-    for i in range(100,121):
+    for i in range(100,201):
         conn = connection_pool.get_connection()
         cursor = conn.cursor()
         query = "SELECT COUNT(*) FROM panel WHERE panel_id = %s"

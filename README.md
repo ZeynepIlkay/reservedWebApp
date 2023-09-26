@@ -2,6 +2,17 @@
 
 The Reservation Application aims to make panel reservations based on specific IDs and provide ease of use.
 
+## Used Technologies
+
+This project utilizes the following technologies:
+
+- **Flask**: A Python web framework used for developing web applications.
+- **MariaDB**: A relational database system used for database management.
+- **Nginx**: An open-source web server and reverse proxy used for serving web content.
+
+Each of these technologies is employed for different aspects of the project.
+
+
 ## Features
 - Access to the application is available through a web page.
 - Reservation records can be made by entering the desired name, panel ID, and reservation duration using the "ADD" button.
